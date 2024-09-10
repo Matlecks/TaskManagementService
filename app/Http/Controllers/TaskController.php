@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 
 class TaskController extends Controller
 {
-    public function store(Request $request)
+    public function store(Request $request)/* : JsonResponse|mixed */
     {
         $validated = $request->validate([
             'user_id' => 'required|exists:users,id',

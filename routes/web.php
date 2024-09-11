@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\TaskController;
+use App\Http\Controllers\UserController;
+
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -35,7 +37,6 @@ Route::group(
 
         Route::post('/destroy/{id}', [TaskController::class, 'destroy'])->name('task.destroy'); // Удаление задачи
 
-
     }
 );
 
@@ -55,6 +56,12 @@ Route::group(
 
         Route::post('/destroy/{id}', [CategoryController::class, 'destroy'])->name('category.destroy'); // Удаление категории
 
+    }
+);
 
+Route::group(
+    ['prefix' => 'users'],
+    function () {
+        Route::get('/', [UserController::class, 'index'])->name('user.index'); //главная страница пользователей
     }
 );

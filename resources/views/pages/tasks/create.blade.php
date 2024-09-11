@@ -5,7 +5,7 @@
         <div class="menu col-2">
             <a href="{{ route('task.index') }}"
                 class="menu_point shadow-sm bg-white rounded p-3 text-decoration-none d-block">Задачи</a>
-            <a href=""
+                <a href="{{ route('user.index') }}"
                 class="menu_point shadow-sm bg-white rounded p-3 mt-3 text-decoration-none w-100 d-block">Пользователи</a>
             <a href="{{ route('category.index') }}"
                 class="menu_point shadow-sm bg-white rounded p-3 mt-3 text-decoration-none w-100 d-block">Категории</a>

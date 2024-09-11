@@ -5,9 +5,8 @@
         <div class="menu col-2">
             <a href="{{ route('task.index') }}"
                 class="menu_point shadow-sm bg-white rounded p-3 text-decoration-none w-100 d-block">Задачи</a>
-            <a href=""
+            <a href="{{ route('user.index') }}"
                 class="menu_point shadow-sm bg-white rounded p-3 mt-3 text-decoration-none w-100 d-block">Пользователи</a>
-
             <a href="{{ route('category.index') }}"
                 class="menu_point shadow-sm bg-white rounded p-3 mt-3 text-decoration-none w-100 d-block">Категории</a>
 
@@ -44,7 +43,7 @@
                             <td>{{ $task->description }}</td>
                             <td>{{ $task->status }}</td>
                             <td>{{ $task->user_id }}</td>
-                            <td>{{ $task->category_id }}</td>
+                            <td>{{ $task->category->name }}</td>
                             <td>{{ $task->created_at }}</td>
                             <td>
                                 <button type="button" data-bs-toggle="dropdown" aria-expanded="false"

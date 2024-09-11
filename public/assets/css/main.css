@@ -1,0 +1,13 @@
+header h1 {
+    font-family: Roboto;
+}
+
+body {
+    background: #B7C0E1/* #F3F4F8 */;
+    width: 100%;
+    height: 100%;
+}
+
+/* .main_wrapper {
+    display: grid;
+} */

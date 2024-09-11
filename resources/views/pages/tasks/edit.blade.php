@@ -48,7 +48,11 @@
                 <div class="form-floating w-25">
                     <select class="form-select" id="floatingSelect" aria-label="Floating label select example"
                         name="category_id">
-                        <option @if ($task->category_id == 1) selected @endif value="1">Категория 1</option>
+                        <option selected value="{{ $task->category->id }}">{{ $task->category->name }}</option>
+
+                        @foreach ($categories as $category)
+                            <option value="{{ $category->id }}">{{ $category->name }}</option>
+                        @endforeach
                     </select>
                     <label for="floatingSelect">Категория</label>
                 </div>

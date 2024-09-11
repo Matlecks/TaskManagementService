@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Category;
 use App\Models\Task;
 use Illuminate\Http\Request;
 
@@ -18,7 +19,14 @@ class TaskController extends Controller
     public function edit($id)
     {
         $task = Task::find($id);
-        return view('pages.tasks.edit', compact('task'));
+
+        // получаю все категории и убираю привязанную категорию. Для селектора
+        $categories = Category::all();
+        $categories = $categories->reject(function ($category) use ($task) {
+            return $category->id === $task->category->id;
+        });
+
+        return view('pages.tasks.edit', compact('task', 'categories'));
     }
 
     public function update(Request $request, $id)
@@ -43,7 +51,9 @@ class TaskController extends Controller
 
     public function create()
     {
-        return view('pages.tasks.create');
+        $categories = Category::all();
+
+        return view('pages.tasks.create', compact('categories'));
     }
 
     public function store(Request $request)/* : JsonResponse|mixed */

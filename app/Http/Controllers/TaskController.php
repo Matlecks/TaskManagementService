@@ -12,13 +12,13 @@ class TaskController extends Controller
     {
         $tasks = Task::all();
 
-        return view('pages.main_page.index', compact('tasks'));
+        return view('pages.tasks.index', compact('tasks'));
     }
 
     public function edit($id)
     {
         $task = Task::find($id);
-        return view('pages.main_page.edit', compact('task'));
+        return view('pages.tasks.edit', compact('task'));
     }
 
     public function update(Request $request, $id)
@@ -43,7 +43,7 @@ class TaskController extends Controller
 
     public function create()
     {
-        return view('pages.main_page.create'/* , compact('task') */);
+        return view('pages.tasks.create');
     }
 
     public function store(Request $request)/* : JsonResponse|mixed */
@@ -56,7 +56,7 @@ class TaskController extends Controller
             'status' => 'required',
         ]);
 
-        $task = Task::create(attributes: $validated);
+        $task = Task::create($validated);
 
         $message = "Задача создана";
         return redirect()->route('task.index')->with('message', value: $message);

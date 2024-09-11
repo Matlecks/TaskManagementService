@@ -4,8 +4,13 @@
     <section class="main_wrapper d-flex mt-4 gap-3">
         <div class="menu col-2">
             <a href="{{ route('task.index') }}"
-                class="menu_point shadow-sm bg-white rounded p-3 text-decoration-none">Задачи</a>
-            <div class="menu_point shadow-sm bg-white rounded p-3 mt-3">Пользователи</div>
+                class="menu_point shadow-sm bg-white rounded p-3 text-decoration-none w-100 d-block">Задачи</a>
+            <a href=""
+                class="menu_point shadow-sm bg-white rounded p-3 mt-3 text-decoration-none w-100 d-block">Пользователи</a>
+
+            <a href="{{ route('category.index') }}"
+                class="menu_point shadow-sm bg-white rounded p-3 mt-3 text-decoration-none w-100 d-block">Категории</a>
+
         </div>
         <div class="content_wrapper col-10 shadow-sm bg-white rounded p-5">
 

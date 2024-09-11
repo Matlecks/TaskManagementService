@@ -14,6 +14,7 @@ class RunSeeder extends Seeder
     {
         $this->call([
             TaskSeeder::class,
+            CategorySeeder::class,
         ]);
     }
 }

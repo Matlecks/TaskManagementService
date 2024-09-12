@@ -2,12 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User;
 use Illuminate\Http\Request;
+
+/* Сервис */
 use App\Services\UserService;
-use Illuminate\Support\Facades\Redis;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Validator;
 
 /* Реквесты */
 use App\Http\Requests\UserCreateRequest;

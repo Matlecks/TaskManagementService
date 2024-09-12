@@ -25,7 +25,9 @@ class UserController extends Controller
 
     public function index(): View
     {
-        $users = $this->userService->getAllUsers();
+
+        $users = $this->userService->getAllUsersFromApi();
+
         return view('pages.users.index', compact('users'));
     }
 
@@ -35,5 +37,4 @@ class UserController extends Controller
         $user = $this->userService->createUser($request->all());
         return response()->json(['message' => 'Пользователь успешно создан!', 'user' => $user], 201);
     }
-
 }

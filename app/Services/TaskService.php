@@ -4,9 +4,25 @@ namespace App\Services;
 
 use App\Models\Task;
 use App\Models\Category;
+use App\Models\User;
+
+use GuzzleHttp\Client;
+
+use Illuminate\Support\Facades\Redis;
+use Illuminate\Support\Facades\Log;
 
 class TaskService
 {
+
+    protected $client;
+
+    public function __construct()
+    {
+        $this->client = new Client([
+            'base_uri' => 'http://usermanagementservice.ru/api/',
+        ]);
+    }
+
     public function getAllTasks()
     {
         return Task::all();
@@ -45,4 +61,31 @@ class TaskService
         $task->delete();
     }
 
+
+    public function getAllUsersFromApi()
+    {
+        $response = $this->client->get('give_users');
+
+        $users = json_decode($response->getBody()->getContents(), true);
+        // ключ кэша
+        $cacheKey = 'users_list';
+        $cachedUsers = Redis::get($cacheKey);
+        if ($cachedUsers) {
+            Redis::del($cacheKey);
+        }
+
+        $userCollection = collect($users['data'])->map(function ($userData) {
+            $user = new User();
+            $user->fill($userData);
+            $user->id = $userData['id'];
+            $user->created_at = $userData['created_at'];
+            $user->updated_at = $userData['updated_at'];
+            return $user;
+        });
+
+
+        Redis::setex($cacheKey, 3600, json_encode($userCollection));
+
+        return $userCollection;
+    }
 }

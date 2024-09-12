@@ -22,9 +22,7 @@ class StoreCategoryRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name.required' => 'Поле name обязательно для заполнения.',
-            'name.string' => 'Поле name должно быть строкой.',
-            'name.max' => 'Поле name не может превышать 255 символов.',
+            'name' => 'required',
         ];
     }
 }

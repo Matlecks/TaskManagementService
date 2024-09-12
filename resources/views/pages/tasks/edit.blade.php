@@ -39,10 +39,14 @@
                     <label for="floatingSelect">Статус</label>
                 </div>
 
-                <div class="input-group w-25 mb-3">
-                    <span class="input-group-text" id="basic-addon1">Id пользователя</span>
-                    <input type="text" class="form-control" placeholder="user_id" aria-label="Username"
-                        aria-describedby="basic-addon1" name="user_id" value="{{ $task->user_id }}">
+                <div class="form-floating w-25">
+                    <select class="form-select" id="floatingSelect" aria-label="Floating label select example"
+                        name="user_id">
+                        @foreach ($users as $user)
+                            <option value="{{ $user->id }}">{{ $user->name }}</option>
+                        @endforeach
+                    </select>
+                    <label for="floatingSelect">Пользователи</label>
                 </div>
 
                 <div class="form-floating w-25">

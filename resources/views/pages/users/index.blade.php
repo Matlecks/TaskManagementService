@@ -27,6 +27,7 @@
                 </thead>
                 <tbody>
                     @foreach ($users as $user)
+                    {{-- @dd($user) --}}
                         <tr>
                             <th scope="row">{{ $user->id }}</th>
                             <td>{{ $user->name }}</td>

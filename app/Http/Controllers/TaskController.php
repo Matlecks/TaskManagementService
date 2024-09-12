@@ -10,7 +10,7 @@ use App\Services\TaskService;
 /* Реквесты */
 use App\Http\Requests\StoreTaskRequest;
 use App\Http\Requests\UpdateTaskRequest;
-
+use App\Services\UserService;
 /* Для тайпхинтов */
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
@@ -34,7 +34,11 @@ class TaskController extends Controller
     public function edit($id): View
     {
         $data = $this->taskService->getTaskForEdit($id);
-        return view('pages.tasks.edit', compact('data.task', 'data.categories'));
+        $task = $data['task'];
+        $categories = $data['categories'];
+        $users = $this->taskService->getAllUsersFromApi();
+
+        return view('pages.tasks.edit', compact('task', 'categories', 'users'));
     }
 
 
@@ -51,7 +55,10 @@ class TaskController extends Controller
     public function create(): View
     {
         $categories = $this->taskService->getCategories();
-        return view('pages.tasks.create', compact('categories'));
+
+        $users = $this->taskService->getAllUsersFromApi();
+
+        return view('pages.tasks.create', compact('categories', 'users'));
     }
 
 

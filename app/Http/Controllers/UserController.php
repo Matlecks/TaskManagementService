@@ -9,9 +9,16 @@ use Illuminate\Support\Facades\Redis;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 
+/* Реквесты */
+use App\Http\Requests\UserCreateRequest;
+
+/* Для тайпхинтов */
+use Illuminate\View\View;
+use Illuminate\Http\JsonResponse;
+
 class UserController extends Controller
 {
-    public function index()
+    public function index(): View
     {
         //ключ кэша
         $cacheKey = 'users_list';
@@ -37,20 +44,9 @@ class UserController extends Controller
         return view('pages.users.index', compact('users'));
     }
 
-    public function handleUserCreated(Request $request)
+    public function handleUserCreated(UserCreateRequest $request): JsonResponse
     {
 
-        Log::info('Received request in handleUserCreated:', $request->all());
-        /* {"user":{"name":"Тест2","email":"asdasdasdasd@mail.ru"}} */
-        $validator = Validator::make($request->all(), [
-            'user.name' => 'required|string|max:255',
-            'user.email' => 'required|email',
-        ]);
-
-        // Если валидация не прошла, вернуть ошибки
-        if ($validator->fails()) {
-            return response()->json($validator->errors(), 422); // не пройдена валидация
-        }
         Log::info('Полученные данные:', $request->all());
 
         // если понадобится сохранение данных, то раскоментировать

@@ -2,31 +2,34 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\UpdateCategoryRequest;
 use App\Models\Category;
 use Illuminate\Http\Request;
 
+/* Для тайпхинтов */
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\JsonResponse;
+use Illuminate\View\View;
+
 class CategoryController extends Controller
 {
-    public function index()
+    public function index(): View
     {
         $categories = Category::all();
 
         return view('pages.categories.index', compact('categories'));
     }
 
-    public function edit($id)
+    public function edit($id): View
     {
         $category = Category::find($id);
         return view('pages.categories.edit', compact('category'));
     }
 
-    public function update(Request $request, $id)
+    public function update(UpdateCategoryRequest $request, $id): RedirectResponse
     {
 
-        // Валидируем входящие данные
-        $validated = $request->validate([
-            'name' => 'required|string|max:255',
-        ]);
+        $validated = $request->validated();
 
         $category = Category::find($id);
         $category->update($validated);
@@ -35,16 +38,14 @@ class CategoryController extends Controller
         return redirect()->route('category.index')->with('message', value: $message);
     }
 
-    public function create()
+    public function create(): View
     {
         return view('pages.categories.create');
     }
 
-    public function store(Request $request)/* : JsonResponse|mixed */
+    public function store(Request $request): RedirectResponse
     {
-        $validated = $request->validate([
-            'name' => 'required|string|max:255',
-        ]);
+        $validated = $request->validated();
 
         $category = Category::create($validated);
 
@@ -52,7 +53,7 @@ class CategoryController extends Controller
         return redirect()->route('category.index')->with('message', value: $message);
     }
 
-    public function destroy($id)
+    public function destroy($id): RedirectResponse
     {
         $category = Category::find($id);
 
@@ -63,7 +64,7 @@ class CategoryController extends Controller
     }
 
     //Реализуйте запросы, которые используют соединение нескольких таблиц (например, получение всех задач по категории).
-    public function getTasksByCategory($categoryId)
+    public function getTasksByCategory($categoryId): JsonResponse
     {
         $category = Category::with('tasks')->find($categoryId);
 

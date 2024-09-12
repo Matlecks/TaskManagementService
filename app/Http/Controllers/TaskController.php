@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Category;
-use App\Models\Task;
 use Illuminate\Http\Request;
+
+/* Сервис */
+use App\Services\TaskService;
 
 /* Реквесты */
 use App\Http\Requests\StoreTaskRequest;
@@ -16,70 +17,59 @@ use Illuminate\View\View;
 
 class TaskController extends Controller
 {
+    protected $taskService;
+
+    public function __construct(TaskService $taskService)
+    {
+        $this->taskService = $taskService;
+    }
+
 
     public function index(): View
     {
-        $tasks = Task::all();
-
+        $tasks = $this->taskService->getAllTasks();
         return view('pages.tasks.index', compact('tasks'));
     }
 
     public function edit($id): View
     {
-        $task = Task::find($id);
-
-        // получаю все категории и убираю привязанную категорию. Для селектора
-        $categories = Category::all();
-        $categories = $categories->reject(function ($category) use ($task) {
-            return $category->id === $task->category->id;
-        });
-
-        return view('pages.tasks.edit', compact('task', 'categories'));
+        $data = $this->taskService->getTaskForEdit($id);
+        return view('pages.tasks.edit', compact('data.task', 'data.categories'));
     }
+
 
     public function update(UpdateTaskRequest $request, $id): RedirectResponse
     {
+        $validated = $request->validated();
 
-        // Валидируем входящие данные
-        $validated = $request->validated(); // Получаем валидированные данные
-
-        $task = Task::find($id);
-        $task->update($validated);
+        $this->taskService->updateTask($id, $validated);
 
         $message = "Задача отредактирована";
-        return redirect()->route('task.index')->with('message', value: $message);
+        return redirect()->route('task.index')->with('message', $message);
     }
 
     public function create(): View
     {
-        $categories = Category::all();
-
+        $categories = $this->taskService->getCategories();
         return view('pages.tasks.create', compact('categories'));
     }
 
+
     public function store(StoreTaskRequest $request): RedirectResponse
     {
-        $validated = $request->validate([
-            'user_id' => 'required',
-            'title' => 'required|string|max:255',
-            'description' => 'nullable|string',
-            'category_id' => 'required',
-            'status' => 'required',
-        ]);
+        $validated = $request->validated();
 
-        $task = Task::create($validated);
+        $this->taskService->storeTask($validated);
 
         $message = "Задача создана";
-        return redirect()->route('task.index')->with('message', value: $message);
+        return redirect()->route('task.index')->with('message', $message);
     }
 
     public function destroy($id): RedirectResponse
     {
-        $task = Task::find($id);
-
-        $task->delete();
+        $this->taskService->destroyTask($id);
 
         $message = "Задача удалена";
-        return redirect()->route('task.index')->with('message', value: $message);
+        return redirect()->route('task.index')->with('message', $message);
     }
 }

@@ -25,9 +25,8 @@ class UpdateTaskRequest extends FormRequest
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',
             'status' => 'required|string',
-            'user_id' => 'required',
-            'category_id' => 'required',
+            'user_id' => 'required|integer',
+            'category_id' => 'required|integer|exists:App\Models\Category,id',
         ];
-
     }
 }

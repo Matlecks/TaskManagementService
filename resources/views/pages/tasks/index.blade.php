@@ -14,9 +14,9 @@
         <div class="content_wrapper col-10 shadow-sm bg-white rounded p-5">
 
             <div class="button_group d-flex justify-content-end mb-4">
-                @if (isset($message))
+                @if (session('success'))
                     <div class="alert alert-success" role="alert">
-                        {{ $message }}
+                        {{ session('success') }}
                     </div>
                 @endif
                 <a href="{{ route('task.create') }}" class="btn btn-outline-success">Создать задачу</a>

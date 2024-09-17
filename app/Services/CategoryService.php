@@ -7,17 +7,17 @@ use Illuminate\Database\Eloquent\Collection;
 
 class CategoryService
 {
-    public function getAllCategories()
+    public function getAllCategories(): Collection
     {
         return Category::all();
     }
 
-    public function getCategoryById($id)
+    public function getCategoryById($id): Category
     {
         return Category::find($id);
     }
 
-    public function updateCategory($id, array $validatedData)
+    public function updateCategory(int $id, array $validatedData): void
     {
         $category = Category::find($id);
         $category->update($validatedData);
@@ -31,17 +31,14 @@ class CategoryService
     public function deleteCategory($id): void
     {
         $category = Category::find($id);
-        if ($category) {
-            $category->delete();
-        }
+
+        $category->delete();
     }
 
     public function getTasksByCategory($categoryId): Collection
     {
         $category = Category::with('tasks')->find($categoryId);
-        if (!$category) {
-            throw new \Exception('Категория не найдена');
-        }
+
         return $category->tasks;
     }
 }

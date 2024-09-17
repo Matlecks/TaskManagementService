@@ -3,14 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-
-/* Сервис */
 use App\Services\UserService;
-
-/* Реквесты */
 use App\Http\Requests\UserCreateRequest;
-
-/* Для тайпхинтов */
 use Illuminate\View\View;
 use Illuminate\Http\JsonResponse;
 

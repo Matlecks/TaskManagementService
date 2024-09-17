@@ -8,5 +8,8 @@ php artisan migrate
 
 php artisan db:seed --class=RunSeeder
 
+4)  Для тестов апи
+composer require --dev mockery/mockery
+
 4) установка предис (работа локальная на windows, дял работы с редис нужен был этот пакет) 
 composer require predis/predis

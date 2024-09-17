@@ -10,10 +10,9 @@ class Task extends Model
 {
     use HasFactory;
 
-    // разрешаем массовое присвоение данным полям
     protected $fillable = ['title', 'description', 'status', 'user_id', 'category_id'];
 
-    public function category()/* : BelongsTo */
+    public function category(): BelongsTo
     {
         return $this->belongsTo(Category::class);
     }

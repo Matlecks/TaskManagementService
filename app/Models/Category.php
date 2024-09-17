@@ -10,10 +10,9 @@ class Category extends Model
 {
     use HasFactory;
 
-    // разрешаем массовое присвоение данным полям
     protected $fillable = ['name'];
 
-    public function tasks()/* : HasMany */
+    public function tasks(): HasMany
     {
         return $this->hasMany(Task::class);
     }

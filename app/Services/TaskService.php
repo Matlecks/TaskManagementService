@@ -5,16 +5,15 @@ namespace App\Services;
 use App\Models\Task;
 use App\Models\Category;
 use App\Models\User;
-
 use GuzzleHttp\Client;
-
 use Illuminate\Support\Facades\Redis;
-use Illuminate\Support\Facades\Log;
+use Illuminate\Database\Eloquent\Collection;
 
 class TaskService
 {
 
     protected $client;
+    public $cacheKey = 'users_list';
 
     public function __construct()
     {
@@ -23,29 +22,29 @@ class TaskService
         ]);
     }
 
-    public function getAllTasks()
+    public function getAllTasks(): Collection
     {
         return Task::all();
     }
 
-    public function getTaskForEdit($id)
+    public function getTaskForEdit($id): array
     {
         $task = Task::find($id);
-        // Получаем все категории и убираем привязанную категорию
-        $categories = Category::all()->reject(function ($category) use ($task) {
-            return $category->id === $task->category->id;
-        });
 
-        return ['task' => $task, 'categories' => $categories];
+        $categories = Category::where('id', '!=', $task->category->id)->get();
+
+        $users = $this->getAllUsersFromApi();
+
+        return ['task' => $task, 'categories' => $categories, 'users' => $users];
     }
 
-    public function updateTask($id, array $validatedData)
+    public function updateTask($id, array $validatedData): void
     {
         $task = Task::find($id);
         $task->update($validatedData);
     }
 
-    public function getCategories()
+    public function getCategories(): Collection
     {
         return Category::all();
     }
@@ -55,23 +54,22 @@ class TaskService
         return Task::create($validatedData);
     }
 
-    public function destroyTask($id)
+    public function destroyTask($id): void
     {
         $task = Task::find($id);
         $task->delete();
     }
 
 
-    public function getAllUsersFromApi()
+    public function getAllUsersFromApi(): Collection
     {
         $response = $this->client->get('give_users');
 
         $users = json_decode($response->getBody()->getContents(), true);
-        // ключ кэша
-        $cacheKey = 'users_list';
-        $cachedUsers = Redis::get($cacheKey);
+
+        $cachedUsers = Redis::get($this->cacheKey);
         if ($cachedUsers) {
-            Redis::del($cacheKey);
+            Redis::del($this->cacheKey);
         }
 
         $userCollection = collect($users['data'])->map(function ($userData) {
@@ -84,7 +82,7 @@ class TaskService
         });
 
 
-        Redis::setex($cacheKey, 3600, json_encode($userCollection));
+        Redis::setex($this->cacheKey, 3600, json_encode($userCollection));
 
         return $userCollection;
     }

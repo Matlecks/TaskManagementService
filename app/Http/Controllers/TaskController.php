@@ -3,15 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-
-/* Сервис */
 use App\Services\TaskService;
-
-/* Реквесты */
 use App\Http\Requests\StoreTaskRequest;
 use App\Http\Requests\UpdateTaskRequest;
-use App\Services\UserService;
-/* Для тайпхинтов */
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
 
@@ -34,12 +28,10 @@ class TaskController extends Controller
     public function edit($id): View
     {
         $data = $this->taskService->getTaskForEdit($id);
-        $task = $data['task'];
-        $categories = $data['categories'];
-        $users = $this->taskService->getAllUsersFromApi();
 
-        return view('pages.tasks.edit', compact('task', 'categories', 'users'));
+        return view('pages.tasks.edit', $data);
     }
+
 
 
     public function update(UpdateTaskRequest $request, $id): RedirectResponse
